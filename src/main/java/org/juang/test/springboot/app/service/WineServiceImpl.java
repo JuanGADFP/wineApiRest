@@ -48,7 +48,7 @@ public class WineServiceImpl implements WineService {
     @Override
     public ResponseEntity<WineResponseRest> save(Wine wine) {
         WineResponseRest response = new WineResponseRest();
-
+        try {
         if (wine.getId() != null) {
             response.setMetadata("Response Status BAD_REQUEST", "400", "ID field should not be sent");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -69,8 +69,10 @@ public class WineServiceImpl implements WineService {
             response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid year field : year field has to be present and greater than year 1601 but less than current year");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+            List<Wine> list = new ArrayList<>();
+            Wine wineGuardado = wineRepository.save(wine);
 
-        List<Owner> owners = wine.getOwners();
+            List<Owner> owners = wine.getOwners();
         if (owners == null) {
             response.setMetadata("Response Status BAD_REQUEST", "400", "All Wines must have a owner");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -84,30 +86,13 @@ public class WineServiceImpl implements WineService {
                 response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid apellido field in Owner");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-            /*
-            if (owner.getId() != null) {
-                response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid ID field in Owner");
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
-             */
+            owner.setWine(wineGuardado); // Establecemos la relación con la entidad Wine que acabamos de guardar
+            ownerRepository.save(owner); // Guardamos el objeto Owner en la base de datos
         }
-        // Saving the Wine entity to the database
-        try {
-            // Saving the Wine entity to the database
-            List<Wine> list = new ArrayList<>();
-            Wine wineGuardado = wineRepository.save(wine);
-
-            // Creating the response with the saved Wine entity
             if (wineGuardado != null) {
                 list.add(wineGuardado);
                 response.getWineResponse().setWine(list);
                 response.setMetadata("Response Status OK", "200", "Successfully saved wine in database");
-
-                // Saving the Owners entities related to the Wine entity
-                for (Owner owner : owners) {
-                    owner.setWine(wineGuardado); // Establecemos la relación con la entidad Wine que acabamos de guardar
-                    ownerRepository.save(owner); // Guardamos el objeto Owner en la base de datos
-                }
             }
         } catch (Exception e) {
             e.getStackTrace();
@@ -129,8 +114,7 @@ public class WineServiceImpl implements WineService {
                 // Eliminar los Owners relacionados con el Wine a borrar
                 List<Owner> owners = wineBuscado.get().getOwners();
                 for (Owner owner : owners) {
-                    owner.setWine(null);
-                    ownerRepository.save(owner);
+                    ownerRepository.deleteById(owner.getId());
                 }
 
                 response.getWineResponse().setWine(list);
@@ -185,7 +169,7 @@ public class WineServiceImpl implements WineService {
 
                 for (Owner owner : ownersRequest) {
                         if (owner.getName() == null || owner.getApellido() == null) {
-                            response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid name field in Owner");
+                            response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid name/apellido field in Owner");
                             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
                         }
                         owner.setName(owner.getName());

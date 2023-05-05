@@ -16,7 +16,7 @@ public class Owner {
     private String apellido;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wine_id") // utiliza "wineID" en lugar de "wine_id"
+    @JoinColumn(name = "wine_id")
     private Wine wine;
 
 
