@@ -130,7 +130,7 @@ class WineControllerTestSpringWebTest {
 	@DisplayName("Probando metodo PUT")
 	void actualizar() {
 		List<Owner> owners = new ArrayList<>();
-		owners.add(new Owner("Marcos", "John Smith", 1L));
+		owners.add(new Owner("2", "h", 1L));
 
 		// Agregar más objetos Owner a la lista si es necesario
 
@@ -138,30 +138,31 @@ class WineControllerTestSpringWebTest {
        // Aquí creas un nuevo objeto Wine sin un ID específico y con la lista de owners creada anteriormente
 
 		client.put().uri("/v1/wine/2")
+				.contentType(MediaType.APPLICATION_JSON)
+				.bodyValue(wine)
 				.exchange()
 				.expectStatus().isOk()
 				.expectHeader().contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
-				.jsonPath("$.wineResponse.wine[0].name").isEqualTo("PUT name")
-				.jsonPath("$.wineResponse.wine[0].winery").isEqualTo("winery")
-				.jsonPath("$.wineResponse.wine[0].año").isEqualTo(2010)
+				.jsonPath("$.wineResponse.wine[0].name").isEqualTo("Espumante de Prueba PUT name")
+				.jsonPath("$.wineResponse.wine[0].winery").isEqualTo("otro Put winery")
+				.jsonPath("$.wineResponse.wine[0].año").isEqualTo(2000)
 				.jsonPath("$.wineResponse.wine[0].id").isEqualTo(2)
 				.jsonPath("$.wineResponse.wine[0].owners[0].id").isEqualTo(1L)
 				.jsonPath("$.wineResponse.wine[0].owners[0].name").isEqualTo("2")
-				.jsonPath("$.wineResponse.wine[0].owners[0].apellido").isEqualTo("h")
-				.jsonPath("$.wineResponse.wine[0].owners[1].id").isEqualTo(2L)
-				.jsonPath("$.wineResponse.wine[0].owners[1].name").isEqualTo("3")
-				.jsonPath("$.wineResponse.wine[0].owners[1].apellido").isEqualTo("e");
+				.jsonPath("$.wineResponse.wine[0].owners[0].apellido").isEqualTo("h");
 
 		// wine2 = new Wine(null, null, null, 0);
 		client.put().uri("/v1/wine/999")
+				.contentType(MediaType.APPLICATION_JSON)
+				.bodyValue(wine)
 				.exchange()
 				.expectStatus().isNotFound()
 				.expectHeader().contentType(MediaType.APPLICATION_JSON)
 				.expectBody()
 				.jsonPath("$.metadata[0].tipo").isEqualTo("Response Status NOT_FOUND")
 				.jsonPath("$.metadata[0].codigo").isEqualTo("404")
-				.jsonPath("$.metadata[0].dato").isEqualTo("Could not consult wine id");
+				.jsonPath("$.metadata[0].dato").isEqualTo("Could not update wine id");
 
 	}
 
