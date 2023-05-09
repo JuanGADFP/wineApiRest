@@ -11,33 +11,30 @@ import java.util.*;
 public class Owner {
 
     @Id
-    private String id;
+    private Long id;
     private String name;
     private String apellido;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*
     @JoinColumn(name = "wine_id")
     private Wine wine;
 
-
-
+     */
 
     // Constructor
     public Owner() {}
 
-    public Owner(String name, String apellido,String id) {
+    public Owner(String name, String apellido,Long id) {
         this.id = id;
         this.name = name;
         this.apellido = apellido;
     }
 
     // Getters and setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,6 +60,7 @@ public class Owner {
     }
 
  */
+
 }
 
 
