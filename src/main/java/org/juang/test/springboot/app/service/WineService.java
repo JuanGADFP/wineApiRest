@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface WineService {
     ResponseEntity<List<Wine>> getAllWines();
-    ResponseEntity<Wine> getWineById(Long id);
+    ResponseEntity<Wine> getWineById(String id);
     ResponseEntity<WineResponseRest> save(Wine wine);
-    ResponseEntity<WineResponseRest> deleteWineById(Long id);
-    ResponseEntity<WineResponseRest> updateWineById(Long id,Wine wine);
+    ResponseEntity<WineResponseRest> deleteWineById(String id);
+    ResponseEntity<WineResponseRest> updateWineById(String id,Wine wine);
 }

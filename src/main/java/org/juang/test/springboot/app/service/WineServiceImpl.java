@@ -35,7 +35,7 @@ public class WineServiceImpl implements WineService {
     }
 
     @Override
-    public ResponseEntity<Wine> getWineById(Long id) {
+    public ResponseEntity<Wine> getWineById(String id) {
         Optional<Wine> optionalWine = wineRepository.findById(id);
         if (optionalWine.isPresent()) {
             Wine wine = optionalWine.get();
@@ -86,7 +86,7 @@ public class WineServiceImpl implements WineService {
                 response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid apellido field in Owner");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-            owner.setWine(wineGuardado); // Establecemos la relación con la entidad Wine que acabamos de guardar
+           // owner.set(wineGuardado); // Establecemos la relación con la entidad Wine que acabamos de guardar
             ownerRepository.save(owner); // Guardamos el objeto Owner en la base de datos
         }
             if (wineGuardado != null) {
@@ -102,7 +102,7 @@ public class WineServiceImpl implements WineService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<WineResponseRest> deleteWineById(Long id) {
+    public ResponseEntity<WineResponseRest> deleteWineById(String id) {
         WineResponseRest response = new WineResponseRest();
         List<Wine> list = new ArrayList<>();
         try {
@@ -110,15 +110,13 @@ public class WineServiceImpl implements WineService {
 
             if (wineBuscado.isPresent()) {
                 list.add(wineBuscado.get());
-
+                wineRepository.deleteById(id);
                 // Eliminar los Owners relacionados con el Wine a borrar
                 List<Owner> owners = wineBuscado.get().getOwners();
                 for (Owner owner : owners) {
                     ownerRepository.deleteById(owner.getId());
                 }
-
                 response.getWineResponse().setWine(list);
-                wineRepository.deleteById(id);
                 response.setMetadata("Response Status Ok", "200", "Successfully Response");
             } else {
                 response.setMetadata("Response Status NOT_FOUND","404" , "Could not delete wine id");
@@ -134,7 +132,7 @@ public class WineServiceImpl implements WineService {
     }
 
     @Override
-    public ResponseEntity<WineResponseRest> updateWineById(Long id, Wine wineRequest) {
+    public ResponseEntity<WineResponseRest> updateWineById(String id, Wine wineRequest) {
         WineResponseRest response = new WineResponseRest();
         List<Wine> list = new ArrayList<>();
         try {
@@ -174,7 +172,7 @@ public class WineServiceImpl implements WineService {
                         }
                         owner.setName(owner.getName());
                         owner.setApellido(owner.getApellido());
-                        owner.setWine(wine);
+                       // owner.setWine(wine);
                     ownerRepository.save(owner);
                 }
                     wineRepository.save(wine);

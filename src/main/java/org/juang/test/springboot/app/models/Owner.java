@@ -1,40 +1,43 @@
 package org.juang.test.springboot.app.models;
 
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.persistence.*;
 import java.util.*;
 
 
-@Entity
-@Table(name = "owners")
+@Document(collection = "owners")
 public class Owner {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String name;
     private String apellido;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wine_id")
     private Wine wine;
 
 
+
+
     // Constructor
     public Owner() {}
 
-    public Owner(String name, String apellido,Long id) {
+    public Owner(String name, String apellido,String id) {
         this.id = id;
         this.name = name;
         this.apellido = apellido;
     }
 
     // Getters and setters
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -54,10 +57,12 @@ public class Owner {
         this.apellido = apellido;
     }
 
-
+/*
     public void setWine(Wine wine) {
         this.wine = wine;
     }
+
+ */
 }
 
 

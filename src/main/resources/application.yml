@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      database: wine_db
+      uri: mongodb+srv://wine_adming:6MWe5UrMwcfl53El@clusterwine.xanfnee.mongodb.net/wine_db?retryWrites=true&w=majority
