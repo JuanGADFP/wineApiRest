@@ -64,19 +64,19 @@ public class WineServiceImpl implements WineService {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-
         if (wine.getAño() == 0 || wine.getAño() <= 1601 || wine.getAño() >=2023) {
             response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid year field : year field has to be present and greater than year 1601 but less than current year");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-            List<Wine> list = new ArrayList<>();
-            Wine wineGuardado = wineRepository.save(wine);
+        List<Owner> owners = wine.getOwners();
 
-            List<Owner> owners = wine.getOwners();
-        if (owners == null) {
-            response.setMetadata("Response Status BAD_REQUEST", "400", "All Wines must have a owner");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        if (owners == null || owners.isEmpty()) {
+                response.setMetadata("Response Status BAD_REQUEST", "400", "All Wines must have a owner");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+
+        List<Wine> list = new ArrayList<>();
+
         for (Owner owner : owners) {
             if (owner.getName() == null || owner.getName().isEmpty()) {
                 response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid name field in Owner");
@@ -86,11 +86,16 @@ public class WineServiceImpl implements WineService {
                 response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid apellido field in Owner");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
-           // owner.set(wineGuardado); // Establecemos la relación con la entidad Wine que acabamos de guardar
+            if (owner.getId() == null){
+                response.setMetadata("Response Status BAD_REQUEST", "400", "the id must be sent to create a new one or to use an existing one");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+            //owner.setWine(wineGuardado); // Establecemos la relación con la entidad Wine que acabamos de guardar
+            wineRepository.save(wine);
             ownerRepository.save(owner); // Guardamos el objeto Owner en la base de datos
         }
-            if (wineGuardado != null) {
-                list.add(wineGuardado);
+            if (wine != null) {
+                list.add(wine);
                 response.getWineResponse().setWine(list);
                 response.setMetadata("Response Status OK", "200", "Successfully saved wine in database");
             }
@@ -107,7 +112,6 @@ public class WineServiceImpl implements WineService {
         List<Wine> list = new ArrayList<>();
         try {
             Optional<Wine> wineBuscado = wineRepository.findById(id);
-
             if (wineBuscado.isPresent()) {
                 list.add(wineBuscado.get());
                 wineRepository.deleteById(id);
@@ -158,6 +162,13 @@ public class WineServiceImpl implements WineService {
                     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
                 }
 
+                List<Owner> owners = wine.getOwners();
+
+                if (owners == null || owners.isEmpty()) {
+                    response.setMetadata("Response Status BAD_REQUEST", "400", "All Wines must have a owner");
+                    return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                }
+
                 wine.setName(wineRequest.getName());
                 wine.setWinery(wineRequest.getWinery());
                 wine.setAño(wineRequest.getAño());
@@ -170,6 +181,11 @@ public class WineServiceImpl implements WineService {
                             response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid name/apellido field in Owner");
                             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
                         }
+                        if (owner.getId() == null){
+                          response.setMetadata("Response Status BAD_REQUEST", "400", "the id must be sent to create a new one or to use an existing one");
+                          return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                        }
+                        owner.setId(owner.getId());
                         owner.setName(owner.getName());
                         owner.setApellido(owner.getApellido());
                        // owner.setWine(wine);

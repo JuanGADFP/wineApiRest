@@ -7,8 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OwnerRepository extends MongoRepository<Owner,String> {
-    //@Query("select o from Owner o where o.name=?1")
-   // Optional<Owner> findByName(String name);
+public interface OwnerRepository extends MongoRepository<Owner,Long> {
+
 }
 
