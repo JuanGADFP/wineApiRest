@@ -1,24 +1,27 @@
 package org.juang.test.springboot.app.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.*;
 
-
+/*
 @Entity
 @Table(name = "wines")
+
+ */
+@Document(collection = "wines")
 public class Wine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String name;
     private String winery;
     private int año;
 
-    @OneToMany(mappedBy = "wine")
+    //@OneToMany(mappedBy = "wine", fetch = FetchType.LAZY)
+    @DBRef
     private List<Owner> owners ;
 
     // Constructor
@@ -26,7 +29,7 @@ public class Wine {
     public Wine() {
     }
 
-    public Wine(Long id, String name, String winery, int año, List<Owner> owners) {
+    public Wine(String id, String name, String winery, int año, List<Owner> owners) {
         this.id = id;
         this.name = name;
         this.winery = winery;
@@ -34,11 +37,11 @@ public class Wine {
         this.owners = owners;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

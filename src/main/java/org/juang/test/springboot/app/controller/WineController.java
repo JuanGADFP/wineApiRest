@@ -26,7 +26,7 @@ public class WineController {
     }
 
     @GetMapping("/wine/{id}")
-    public ResponseEntity<Wine> getWineById(@PathVariable Long id) {
+    public ResponseEntity<Wine> getWineById(@PathVariable String id) {
         Wine wine = wineService.getWineById(id).getBody();
         return wine != null ? ResponseEntity.ok(wine) : ResponseEntity.notFound().build();
     }
@@ -37,12 +37,12 @@ public class WineController {
     }
 
     @PutMapping("/wine/{id}")
-    public ResponseEntity<WineResponseRest> updateWineById(@PathVariable Long id,@RequestBody Wine wine) {
+    public ResponseEntity<WineResponseRest> updateWineById(@PathVariable String id,@RequestBody Wine wine) {
         return wineService.updateWineById(id, wine);
     }
 
     @DeleteMapping("/wine/{id}")
-    public ResponseEntity<WineResponseRest> deleteWineById(@PathVariable Long id) {
+    public ResponseEntity<WineResponseRest> deleteWineById(@PathVariable String id) {
         return wineService.deleteWineById(id);
     }
 }
