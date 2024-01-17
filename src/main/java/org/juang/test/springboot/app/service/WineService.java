@@ -1,6 +1,5 @@
 package org.juang.test.springboot.app.service;
 
-import org.juang.test.springboot.app.models.Owner;
 import org.juang.test.springboot.app.models.Wine;
 import org.juang.test.springboot.app.response.WineResponseRest;
 import org.springframework.http.ResponseEntity;

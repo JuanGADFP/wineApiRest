@@ -6,11 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.*;
 import java.util.*;
 
-/*
-@Entity
-@Table(name = "wines")
 
- */
 @Document(collection = "wines")
 public class Wine {
 
@@ -20,11 +16,8 @@ public class Wine {
     private String winery;
     private int año;
 
-    //@OneToMany(mappedBy = "wine", fetch = FetchType.LAZY)
     @DBRef
     private List<Owner> owners ;
-
-    // Constructor
 
     public Wine() {
     }
