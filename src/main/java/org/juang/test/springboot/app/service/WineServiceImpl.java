@@ -2,8 +2,6 @@ package org.juang.test.springboot.app.service;
 
 import java.util.*;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.juang.test.springboot.app.models.Owner;
 import org.juang.test.springboot.app.models.Wine;
 import org.juang.test.springboot.app.repository.OwnerRepository;
@@ -14,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotEmpty;
 
 @Service
 public class WineServiceImpl implements WineService {
@@ -78,6 +75,7 @@ public class WineServiceImpl implements WineService {
         List<Wine> list = new ArrayList<>();
 
         for (Owner owner : owners) {
+            /*
             if (owner.getName() == null || owner.getName().isEmpty()) {
                 response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid name field in Owner");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -86,6 +84,7 @@ public class WineServiceImpl implements WineService {
                 response.setMetadata("Response Status BAD_REQUEST", "400", "Invalid apellido field in Owner");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
+             */
             if (owner.getId() == null){
                 response.setMetadata("Response Status BAD_REQUEST", "400", "the id must be sent to create a new one or to use an existing one");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

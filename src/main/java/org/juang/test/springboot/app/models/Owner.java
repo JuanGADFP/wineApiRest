@@ -4,8 +4,6 @@ package org.juang.test.springboot.app.models;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
-import java.util.*;
-
 
 @Document(collection = "owners")
 public class Owner {
@@ -14,13 +12,7 @@ public class Owner {
     private Long id;
     private String name;
     private String apellido;
-    /*
-    @JoinColumn(name = "wine_id")
-    private Wine wine;
 
-     */
-
-    // Constructor
     public Owner() {}
 
     public Owner(String name, String apellido,Long id) {
@@ -53,13 +45,6 @@ public class Owner {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-
-/*
-    public void setWine(Wine wine) {
-        this.wine = wine;
-    }
-
- */
 
 }
 
